@@ -1,4 +1,6 @@
 import cv2
+import os
+os.environ["QT_QPA_PLATFORM"] = "xcb"
 from hand_tracking import HandTracker
 from web import SpiderWeb
 from visuals import draw_web
