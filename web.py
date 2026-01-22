@@ -1,28 +1,23 @@
+import math
 from nodes import Node
-
-FINGER_IDS = [4, 8, 12, 16, 20]
+import config
 
 class SpiderWeb:
     def __init__(self):
-        self.edges = []
+        self.connections = []
 
     def update_between_hands(self, hand1, hand2):
-        self.edges = []
+        self.connections = []
 
-        left_fingers = []
-        right_fingers = []
+        left_nodes = [Node(*hand1[i]) for i in config.FINGER_IDS]
+        right_nodes = [Node(*hand2[i]) for i in config.FINGER_IDS]
 
-        for fid in FINGER_IDS:
-            lx, ly = hand1[fid]
-            rx, ry = hand2[fid]
+        for l_node in left_nodes:
+            for r_node in right_nodes:
+                dist = math.hypot(l_node.x - r_node.x, l_node.y - r_node.y)
 
-            left_fingers.append(Node(lx, ly))
-            right_fingers.append(Node(rx, ry))
+                if dist < config.MAX_CONNECTION_DISTANCE:
+                    self.connections.append((l_node, r_node, dist))
 
-        # ALL left fingers → ALL right fingers
-        for lf in left_fingers:
-            for rf in right_fingers:
-                self.edges.append((lf, rf))
-
-    def get_edges(self):
-        return self.edges
+    def get_connections(self):
+        return self.connections
